@@ -13,7 +13,12 @@
   <main class="card">
     <p>One last thing…<br/>a word only we know.</p>
 
-    <input id="passcode" type="password" placeholder="********" />
+    <input id="passcode" type="password" placeholder="********" autocomplete="off" />
+    <label class="show-passcode">
+      <input type="checkbox" id="togglePasscode" />
+      <span>Let me see what I'm typing</span>
+    </label>
+    <p id="passcodeMessage" class="message"></p>
     <button onclick="verifyPasscode()">Enter</button>
 
     <p id="error" class="error"></p>
