@@ -1,1 +1,172 @@
-Hey fellas, I'm Nirmal Rajput
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Just Us</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <style>
+    body {
+      background: #fffaf6;
+      font-family: "Georgia", serif;
+      color: #3a2f2f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      max-width: 420px;
+      text-align: center;
+      padding: 40px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      animation: fadeIn 1.2s ease;
+    }
+
+    h1 {
+      font-weight: normal;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 16px;
+      opacity: 0.8;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 16px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-family: inherit;
+    }
+
+    button {
+      margin-top: 16px;
+      padding: 10px 20px;
+      border: none;
+      background: #d8a7a7;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #c88f8f;
+    }
+
+    #passcode-box,
+    #content,
+    #error {
+      display: none;
+    }
+
+    #error {
+      margin-top: 16px;
+      color: #b05c5c;
+      font-size: 14px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+
+    <div id="intro">
+      <h1>Hello 🤍</h1>
+      <p>This little corner exists only for someone special.</p>
+
+      <div id="g_id_onload"
+           data-client_id="899545129533-ih7tln64en54vcevq2blov78ep302n3c.apps.googleusercontent.com/"
+           data-callback="handleGoogleLogin">
+      </div>
+
+      <div class="g_id_signin" data-theme="outline" data-size="large"></div>
+    </div>
+
+    <div id="passcode-box">
+      <p>One last thing…<br/>a word only we know.</p>
+      <input type="password" id="passcode" placeholder="••••••••" />
+      <button onclick="verifyPasscode()">Enter</button>
+    </div>
+
+    <div id="error"></div>
+
+    <div id="content">
+      <h1>Welcome ❤️</h1>
+      <p>
+        You made it.<br/>
+        Take your time here.
+      </p>
+    </div>
+
+  </div>
+
+  <script>
+    /* 🌸 Allowed emails */
+    const ALLOWED_EMAILS = [
+      "nirmalrajput015@gmail.com",
+      "nirmalrajput228@gmail.com"
+    ];
+
+    /* 🌸 SHA-256 hash of passcode */
+    const PASSCODE_HASH =
+      "53ec406b1e1fdf01f250f19f2773a4441c166c8f2908ba5fe4f6fe4ebea96d78";
+    // example hash = "password"
+
+    function showError(message) {
+      const el = document.getElementById("error");
+      el.textContent = message;
+      el.style.display = "block";
+    }
+
+    function handleGoogleLogin(response) {
+      const payload = JSON.parse(atob(response.credential.split(".")[1]));
+      const email = payload.email;
+
+      if (!ALLOWED_EMAILS.includes(email)) {
+        showError("This space isn’t meant for everyone.");
+        return;
+      }
+
+      document.querySelector(".g_id_signin").style.display = "none";
+      document.getElementById("passcode-box").style.display = "block";
+    }
+
+    async function verifyPasscode() {
+      const input = document.getElementById("passcode").value;
+
+      const hashBuffer = await crypto.subtle.digest(
+        "SHA-256",
+        new TextEncoder().encode(input)
+      );
+
+      const hash = Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+
+      if (hash === PASSCODE_HASH) {
+        document.getElementById("passcode-box").style.display = "none";
+        document.getElementById("content").style.display = "block";
+      } else {
+        showError("That doesn’t feel quite right.");
+      }
+    }
+  </script>
+
+</body>
+</html>
