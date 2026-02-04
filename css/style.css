@@ -73,3 +73,22 @@ button:hover {
   color: #b05c5c;
   font-size: 14px;
 }
+
+.show-passcode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #6b5a5a;
+  cursor: pointer;
+}
+
+.show-passcode input {
+  accent-color: #c48b8b;
+}
+
+.message {
+  font-size: 0.85rem;
+  color: #a45b5b;
+  min-height: 1em;
+}
