@@ -165,6 +165,7 @@
 
   <script>
     const SESSION_KEY = "soft-private-access";
+    const PAGE_KEY = "soft-last-page";
     
     /* 🌸 Allowed emails */
     const ALLOWED_EMAILS = [
@@ -212,11 +213,16 @@
       const pages = document.querySelectorAll(".page");
     
       pages[currentPage].classList.remove("active");
+    
       currentPage = (currentPage + 1) % pages.length;
+    
       pages[currentPage].classList.add("active");
+    
+      sessionStorage.setItem(PAGE_KEY, currentPage);
     
       revealContent();
     }
+
 
     async function verifyPasscode() {
       const input = document.getElementById("passcode").value;
@@ -232,6 +238,8 @@
 
       if (hash === PASSCODE_HASH) {
         sessionStorage.setItem(SESSION_KEY, "granted");
+        sessionStorage.setItem(PAGE_KEY, 0);
+
         document.getElementById("passcode-box").style.display = "none";
         revealContent();
       } else {
@@ -243,9 +251,20 @@
       if (sessionStorage.getItem(SESSION_KEY) === "granted") {
         document.getElementById("intro").style.display = "none";
         document.getElementById("passcode-box").style.display = "none";
+    
+        const savedPage = parseInt(sessionStorage.getItem(PAGE_KEY), 10);
+        const pages = document.querySelectorAll(".page");
+    
+        if (!isNaN(savedPage) && pages[savedPage]) {
+          pages.forEach(p => p.classList.remove("active"));
+          currentPage = savedPage;
+          pages[currentPage].classList.add("active");
+        }
+    
         revealContent();
       }
     });
+
     
   </script>
 
