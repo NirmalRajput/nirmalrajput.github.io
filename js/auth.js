@@ -52,3 +52,14 @@ function clearError() {
   el.textContent = "";
   el.style.display = "none";
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("togglePasscode");
+  const input = document.getElementById("passcode");
+
+  if (toggle && input) {
+    toggle.addEventListener("change", () => {
+      input.type = toggle.checked ? "text" : "password";
+    });
+  }
+});
