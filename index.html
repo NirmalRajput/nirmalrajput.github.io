@@ -5,39 +5,7 @@
   <title>Just Us</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <script src="https://accounts.google.com/gsi/client" async defer>
-    const SESSION_KEY = "soft-private-access";
-
-    function revealContent() {
-      const content = document.getElementById("content");
-      content.style.display = "block";
-    
-      Array.from(content.children).forEach((el, i) => {
-        el.classList.add("letter");
-        el.style.animationDelay = `${i * 0.3}s`;
-      });
-    }
-
-    let currentPage = 0;
-    
-    function nextPage() {
-      const pages = document.querySelectorAll(".page");
-    
-      pages[currentPage].classList.remove("active");
-      currentPage = (currentPage + 1) % pages.length;
-      pages[currentPage].classList.add("active");
-    
-      revealContent();
-    }
-    
-    window.addEventListener("load", () => {
-      if (sessionStorage.getItem(SESSION_KEY) === "granted") {
-        document.getElementById("intro").style.display = "none";
-        document.getElementById("passcode-box").style.display = "none";
-        revealContent();
-      }
-    });
-  </script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <style>
     body {
@@ -196,6 +164,8 @@
   </div>
 
   <script>
+    const SESSION_KEY = "soft-private-access";
+    
     /* 🌸 Allowed emails */
     const ALLOWED_EMAILS = [
       "nirmalrajput015@gmail.com",
@@ -226,6 +196,28 @@
       document.getElementById("passcode-box").style.display = "block";
     }
 
+    function revealContent() {
+      const content = document.getElementById("content");
+      content.style.display = "block";
+    
+      Array.from(content.children).forEach((el, i) => {
+        el.classList.add("letter");
+        el.style.animationDelay = `${i * 0.3}s`;
+      });
+    }
+
+    let currentPage = 0;
+    
+    function nextPage() {
+      const pages = document.querySelectorAll(".page");
+    
+      pages[currentPage].classList.remove("active");
+      currentPage = (currentPage + 1) % pages.length;
+      pages[currentPage].classList.add("active");
+    
+      revealContent();
+    }
+
     async function verifyPasscode() {
       const input = document.getElementById("passcode").value;
 
@@ -246,6 +238,15 @@
         showError("That doesn’t feel quite right.");
       }
     }
+
+    window.addEventListener("load", () => {
+      if (sessionStorage.getItem(SESSION_KEY) === "granted") {
+        document.getElementById("intro").style.display = "none";
+        document.getElementById("passcode-box").style.display = "none";
+        revealContent();
+      }
+    });
+    
   </script>
 
 </body>
