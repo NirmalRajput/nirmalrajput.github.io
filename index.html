@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="stylesheet" href="/css/style.css" />
+
+  <!-- Google Identity -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="/js/auth.js"></script>
 </head>
@@ -16,7 +18,7 @@
     <p>This space exists only for someone special.</p>
 
     <div id="g_id_onload"
-         data-client_id="899545129533-ih7tln64en54vcevq2blov78ep302n3c.apps.googleusercontent.com"
+         data-client_id="YOUR_GOOGLE_CLIENT_ID"
          data-callback="handleGoogleLogin">
     </div>
 
@@ -24,21 +26,6 @@
 
     <p id="error" class="error"></p>
   </main>
-
-  <script>
-    function handleGoogleLogin(response) {
-      const payload = JSON.parse(atob(response.credential.split(".")[1]));
-      const email = payload.email;
-
-      if (!ALLOWED_EMAILS.includes(email)) {
-        showError("This space isn’t meant for everyone.");
-        return;
-      }
-
-      sessionStorage.setItem(GOOGLE_KEY, "ok");
-      window.location.href = "/passcode.html";
-    }
-  </script>
 
 </body>
 </html>
