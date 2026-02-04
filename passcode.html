@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>One last thing</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/auth.js"></script>
+</head>
+<body>
+  <p>One last thing… a word only we know.</p>
+  <input id="passcode" type="password">
+  <button onclick="verify()">Enter</button>
+
+  <script>
+    async function verify() {
+      const input = document.getElementById("passcode").value;
+
+      const hashBuffer = await crypto.subtle.digest(
+        "SHA-256",
+        new TextEncoder().encode(input)
+      );
+
+      const hash = Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+
+      if (hash === PASSCODE_HASH) {
+        sessionStorage.setItem(SESSION_KEY, "granted");
+        window.location.href = "/welcome.html";
+      }
+    }
+  </script>
+</body>
+</html>
