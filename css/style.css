@@ -75,12 +75,19 @@ button:hover {
 }
 
 .show-passcode {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
+
   font-size: 0.9rem;
   color: #6b5a5a;
   cursor: pointer;
+
+  white-space: nowrap;
+}
+
+.show-passcode span {
+  line-height: 1;
 }
 
 .show-passcode input {
