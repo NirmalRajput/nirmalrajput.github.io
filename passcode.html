@@ -1,17 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>One last thing</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="/css/style.css" />
   <script src="/js/auth.js"></script>
 </head>
 <body>
-  <p>One last thing… a word only we know.</p>
-  <input id="passcode" type="password">
-  <button onclick="verify()">Enter</button>
+
+  <main class="card">
+    <p>One last thing…<br/>a word only we know.</p>
+
+    <input id="passcode" type="password" placeholder="********" />
+    <button onclick="verifyPasscode()">Enter</button>
+
+    <p id="error" class="error"></p>
+  </main>
 
   <script>
-    async function verify() {
+    async function verifyPasscode() {
+      clearError();
+
       const input = document.getElementById("passcode").value;
 
       const hashBuffer = await crypto.subtle.digest(
@@ -25,9 +36,13 @@
 
       if (hash === PASSCODE_HASH) {
         sessionStorage.setItem(SESSION_KEY, "granted");
+        sessionStorage.setItem(PAGE_KEY, "/welcome.html");
         window.location.href = "/welcome.html";
+      } else {
+        showError("That doesn’t feel quite right.");
       }
     }
   </script>
+
 </body>
 </html>
