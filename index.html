@@ -184,18 +184,22 @@
       el.style.display = "block";
     }
 
+    
     function handleGoogleLogin(response) {
+      document.getElementById("error").style.display = "none";
+    
       const payload = JSON.parse(atob(response.credential.split(".")[1]));
       const email = payload.email;
-
+    
       if (!ALLOWED_EMAILS.includes(email)) {
         showError("This space isn’t meant for everyone.");
         return;
       }
-
+    
       document.querySelector(".g_id_signin").style.display = "none";
       document.getElementById("passcode-box").style.display = "block";
     }
+
 
     function revealContent() {
       const content = document.getElementById("content");
@@ -223,29 +227,38 @@
       revealContent();
     }
 
-
+    
     async function verifyPasscode() {
+      // Always reset error first
+      const errorEl = document.getElementById("error");
+      errorEl.textContent = "";
+      errorEl.style.display = "none";
+    
       const input = document.getElementById("passcode").value;
-
+    
       const hashBuffer = await crypto.subtle.digest(
         "SHA-256",
         new TextEncoder().encode(input)
       );
-
+    
       const hash = Array.from(new Uint8Array(hashBuffer))
         .map(b => b.toString(16).padStart(2, "0"))
         .join("");
-
+    
       if (hash === PASSCODE_HASH) {
         sessionStorage.setItem(SESSION_KEY, "granted");
         sessionStorage.setItem(PAGE_KEY, 0);
-
+    
+        document.getElementById("intro").style.display = "none";
         document.getElementById("passcode-box").style.display = "none";
+        document.getElementById("error").style.display = "none";
+    
         revealContent();
       } else {
         showError("That doesn’t feel quite right.");
       }
     }
+
 
     window.addEventListener("load", () => {
       if (sessionStorage.getItem(SESSION_KEY) === "granted") {
