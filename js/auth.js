@@ -11,6 +11,34 @@ const ALLOWED_EMAILS = [
 const PASSCODE_HASH =
   "53ec406b1e1fdf01f250f19f2773a4441c166c8f2908ba5fe4f6fe4ebea96d78";
 
+/* ------------------ */
+/* Google Sign-In     */
+/* ------------------ */
+
+function handleGoogleLogin(response) {
+  clearError();
+
+  if (!response || !response.credential) {
+    showError("Something went wrong.");
+    return;
+  }
+
+  const payload = JSON.parse(atob(response.credential.split(".")[1]));
+  const email = payload.email;
+
+  if (!ALLOWED_EMAILS.includes(email)) {
+    showError("This space isn’t meant for everyone.");
+    return;
+  }
+
+  sessionStorage.setItem(GOOGLE_KEY, "ok");
+  window.location.href = "/passcode.html";
+}
+
+/* ------------------ */
+/* Error helpers      */
+/* ------------------ */
+
 function showError(message) {
   const el = document.getElementById("error");
   if (!el) return;
